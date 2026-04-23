@@ -451,7 +451,9 @@
     <button class="mint-btn" id="mintBtn" onclick="handleMint()">
       Seal this wish forever →
     </button>
-    <p class="mint-note">Paid in ETH · Gas < $0.01 · Base blockchain · Cannot be deleted · Ever</p>
+    <p class="mint-note">Paid in ETH · Gas < $0.01 · Base blockchain
+      · Cannot be deleted · Ever</p>
+    <p style="text-align:center;margin-top:6px;"><a href="how-it-works.html" style="color:var(--gold);font-size:12px;text-decoration:none;">How it works →</a></p>
   </div>
 
   <!-- PUBLIC MOMENTS SECTION -->
@@ -539,7 +541,7 @@
 </div>
 
 <footer style="text-align:center;padding:32px 20px;border-top:1px solid var(--border);font-size:12px;color:var(--chain-light);letter-spacing:0.05em;">
-  <div style="margin-bottom:8px;">Eternal Wishes · Base blockchain · No login · No tracking · No personal data stored</div>
+  <div style="margin-bottom:8px;">No login · No tracking · No personal data stored</div>
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
     <a href="how-it-works.html" style="color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">How it works</a>
     <a href="privacy.html" style="color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">Privacy</a>
@@ -1261,7 +1263,6 @@
     }
   }
 
- 
   function renderFeed(){
     // feedCount set by loadRecentFeed()
     document.getElementById('wishFeed').innerHTML=feedWishes.map(w=>{
