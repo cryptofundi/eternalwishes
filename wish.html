@@ -127,8 +127,9 @@
   .share-panel { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 14px; animation: cardReveal 0.7s cubic-bezier(0.34,1.2,0.64,1) 0.25s both; }
   .share-header { background: var(--cream); padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--chain); font-weight: 500; }
   .share-body { padding: 14px; }
-  .share-link-row { display: flex; gap: 8px; margin-bottom: 10px; max-width: 100%; overflow: hidden; }
-  .share-link-input { flex: 1; min-width: 0; background: var(--parchment); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; font-size: 11px; font-family: monospace; color: var(--muted); outline: none; overflow: hidden; text-overflow: ellipsis; }
+  .share-link-row { display: flex; gap: 8px; margin-bottom: 10px; max-width: 100%; }
+  .share-link-input { flex: 1; min-width: 0; width: 100%; background: var(--parchment); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; font-family: inherit; color: var(--muted); outline: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  @media (max-width: 480px) { .share-link-row { flex-direction: column; } .share-link-input { width: 100%; } }
   .copy-btn { padding: 9px 13px; background: var(--ink); color: var(--parchment); border: none; border-radius: var(--radius-sm); font-size: 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: all 0.2s; font-weight: 500; }
   .copy-btn:hover { background: #2d2520; }
   .copy-btn.copied { background: #15803d; }
