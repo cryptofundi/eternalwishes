@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eternal Wishes — Forever on the Blockchain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1410; --parchment: #faf7f2; --cream: #f4efe6;
+    --gold: #c9973a; --gold-light: #e8c97a; --gold-pale: #f7edcd;
+    --chain: #8a7560; --chain-light: #b5a48a; --muted: #7a6e62;
+    --border: rgba(201,151,58,0.2); --radius: 16px; --radius-sm: 10px;
+  }
+  html { scroll-behavior: smooth; }
+  html { overflow-x: hidden; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--parchment); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+
+  /* HEADER */
+  header { position: relative; text-align: center; padding: 56px 24px 40px; border-bottom: 1px solid var(--border); }
+  .logo-chain { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+  .chain-link { width: 20px; height: 11px; border: 2px solid var(--gold); border-radius: 20px; position: relative; opacity: 0.7; }
+  .chain-link::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 8px; height: 8px; border-radius: 50%; background: var(--gold-light); opacity: 0.5; }
+  .logo-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 7vw, 68px); font-weight: 300; letter-spacing: -0.02em; line-height: 1.1; }
+  h1 em { font-style: italic; color: var(--gold); }
+  .tagline { font-size: 14px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 12px; font-weight: 300; }
+  .trust-pills { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+  .pill { font-size: 11px; padding: 4px 12px; border: 1px solid var(--border); border-radius: 20px; color: var(--chain); background: var(--cream); letter-spacing: 0.05em; }
+
+  /* MAIN */
+  main { max-width: 900px; margin: 0 auto; padding: 48px 20px 80px; position: relative; z-index: 1; }
+
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--chain); margin-bottom: 14px; font-weight: 500; }
+
+  /* OCCASIONS */
+  .occasions { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 40px; }
+  .occasion-btn { background: var(--cream); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px 10px; cursor: pointer; text-align: center; transition: all 0.2s ease; font-family: 'DM Sans', sans-serif; position: relative; overflow: hidden; }
+  .occasion-btn::before { content: ''; position: absolute; inset: 0; background: var(--gold-pale); opacity: 0; transition: opacity 0.2s; }
+  .occasion-btn:hover::before { opacity: 1; }
+  .occasion-btn:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .occasion-btn.active { border-color: var(--gold); background: var(--gold-pale); }
+  .occasion-btn.active::after { content: ''; position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+  .occasion-icon { font-size: 22px; display: block; margin-bottom: 6px; position: relative; z-index: 1; }
+  .occasion-name { font-size: 12px; color: var(--ink); font-weight: 400; position: relative; z-index: 1; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--chain); font-weight: 500; }
+  input, textarea, select { background: var(--cream); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--ink); transition: border-color 0.2s; outline: none; resize: none; width: 100%; max-width: 100%; box-sizing: border-box; }
+  input:focus, textarea:focus, select:focus { border-color: var(--gold); background: var(--gold-pale); }
+  input::placeholder, textarea::placeholder { color: var(--chain-light); }
+  .char-count { text-align: right; font-size: 11px; color: var(--chain-light); margin-top: -4px; }
+
+  /* IMAGE UPLOAD (Premium) */
+  .image-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--cream); position: relative; overflow: hidden; }
+  .image-upload-area:hover { border-color: var(--gold); background: var(--gold-pale); }
+  .image-upload-area.has-image { border-style: solid; border-color: var(--gold); }
+  .upload-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; display: none; }
+  .upload-preview.visible { display: block; margin-bottom: 8px; }
+  .upload-placeholder { font-size: 13px; color: var(--chain); }
+  .upload-placeholder span { font-size: 24px; display: block; margin-bottom: 6px; }
+  #imageInput { display: none; }
+
+  /* THEME SELECTOR (Premium) */
+  .themes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 480px) { .themes { grid-template-columns: repeat(2, 1fr); } }
+  .theme-btn { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 6px; cursor: pointer; text-align: center; transition: all 0.2s; background: var(--cream); font-family: 'DM Sans', sans-serif; }
+  .theme-btn:hover, .theme-btn.active { border-color: var(--gold); }
+  .theme-btn.active { background: var(--gold-pale); }
+  .theme-swatch { width: 28px; height: 28px; border-radius: 50%; margin: 0 auto 6px; border: 2px solid rgba(255,255,255,0.4); }
+  .theme-label { font-size: 11px; color: var(--ink); }
+
+  /* TIER CARDS */
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+  @media (max-width: 480px) { .tiers { grid-template-columns: 1fr; } }
+  .tier-card { border: 1.5px solid var(--border); border-radius: var(--radius); padding: 20px 16px; cursor: pointer; transition: all 0.2s ease; background: var(--cream); position: relative; text-align: center; }
+  .tier-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+  .tier-card.active { border-color: var(--gold); background: var(--gold-pale); }
+  .tier-card.active .tier-price { color: var(--gold); }
+  .tier-popular { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #fff; font-size: 10px; padding: 2px 10px; border-radius: 20px; white-space: nowrap; font-weight: 500; }
+  .tier-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; margin-bottom: 4px; }
+  .tier-price { font-size: 24px; font-weight: 500; color: var(--chain); margin-bottom: 10px; transition: color 0.2s; }
+  .tier-price span { font-size: 13px; font-weight: 300; color: var(--muted); }
+  .tier-tagline { font-size: 11px; color: var(--gold); font-style: italic; margin-bottom: 10px; font-family: 'Cormorant Garamond', serif; font-size: 14px; }
+  .tier-features { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.8; text-align: left; }
+  .tier-features li::before { content: '— '; color: var(--gold); }
+
+  /* PREMIUM FIELDS */
+  .premium-fields { display: none; border: 1px solid rgba(201,151,58,0.3); border-radius: var(--radius); padding: 20px; background: linear-gradient(135deg, var(--gold-pale) 0%, var(--cream) 100%); margin-bottom: 20px; }
+  .premium-fields.visible { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .premium-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+
+  /* PAYMENT */
+  .payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .pay-btn { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 16px; cursor: pointer; background: var(--cream); transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-family: 'DM Sans', sans-serif; }
+  .pay-btn:hover { border-color: var(--gold); }
+  .pay-btn.active { border-color: var(--gold); background: var(--gold-pale); }
+  .pay-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: var(--parchment); flex-shrink: 0; }
+  .pay-label { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .pay-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .payment-info { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 16px; display: none; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .payment-info.visible { display: block; }
+
+  /* MINT BTN */
+  .mint-btn { width: 100%; padding: 18px; background: var(--ink); color: var(--parchment); border: none; border-radius: var(--radius); font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.05em; cursor: pointer; transition: all 0.25s ease; position: relative; overflow: hidden; }
+  .mint-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(201,151,58,0.15), transparent); transform: translateX(-100%); transition: transform 0.5s; }
+  .mint-btn:hover::before { transform: translateX(100%); }
+  .mint-btn:hover { background: #2d2520; transform: translateY(-1px); }
+  .mint-note { text-align: center; font-size: 11px; color: var(--chain-light); margin-top: 10px; letter-spacing: 0.05em; }
+
+  /* DIVIDER */
+  .section-divider { display: flex; align-items: center; gap: 16px; margin: 32px 0; }
+  .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .divider-ornament { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gold); opacity: 0.6; }
+
+  /* FEED */
+  .feed-section { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .feed-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+  .feed-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; }
+  .feed-count { font-size: 12px; color: var(--chain-light); letter-spacing: 0.08em; }
+  .feed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .feed-card { border-radius: var(--radius); padding: 18px; transition: transform 0.2s, border-color 0.2s; cursor: pointer; border: 1px solid var(--border); }
+  .feed-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .feed-occasion { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 8px; }
+  .feed-message { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; line-height: 1.5; margin-bottom: 10px; }
+  .feed-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--chain-light); }
+  .feed-chain-badge { font-size: 10px; padding: 2px 7px; border: 1px solid var(--border); border-radius: 20px; color: var(--chain); }
+  .feed-avatar { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--gold); font-weight: 500; border: 1px solid var(--border); }
+
+  /* WALLET */
+  .top-nav { position: sticky; top: 0; z-index: 50; background: var(--ink); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; }
+  .top-nav-brand { color: var(--gold-light); font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; text-decoration: none; }
+  .top-nav-links { display: flex; gap: 14px; align-items: center; }
+  .top-nav-links a { color: var(--chain-light); font-size: 12px; text-decoration: none; transition: color 0.2s; }
+  .top-nav-links a:hover { color: var(--gold-light); }
+  .wallet-bar { display: flex; align-items: center; gap: 8px; }
+  .wallet-connect-btn { background: var(--ink); color: var(--parchment); border: none; border-radius: 20px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 7px; transition: all 0.2s; }
+  .wallet-connect-btn:hover { background: #2d2520; }
+  .wallet-dot { width: 7px; height: 7px; border-radius: 50%; background: #ef4444; }
+  .wallet-dot.connected { background: #22c55e; }
+
+  /* PROCESSING */
+  .processing-overlay { position: fixed; inset: 0; background: rgba(26,20,16,0.85); backdrop-filter: blur(8px); z-index: 200; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+  .processing-overlay.visible { display: flex; }
+  .spinner { width: 48px; height: 48px; border: 2px solid rgba(201,151,58,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--parchment); font-weight: 300; letter-spacing: 0.05em; }
+  .processing-sub { font-size: 12px; color: var(--chain-light); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(26,20,16,0.7); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.visible { display: flex; animation: fadeIn 0.3s ease; }
+  .modal { background: var(--parchment); border-radius: 24px; padding: 40px 36px; max-width: 480px; width: 100%; text-align: center; border: 1px solid var(--border); animation: slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1); position: relative; }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 50%; background: var(--cream); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.2s; }
+  .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+  .modal-seal { width: 64px; height: 64px; background: var(--gold-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; border: 2px solid var(--gold); }
+  .modal h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+  .wish-preview { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px; text-align: left; }
+  .wish-preview-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--chain); margin-bottom: 6px; }
+  .wish-preview-text { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; color: var(--ink); line-height: 1.5; }
+  .chain-proof { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--chain-light); justify-content: center; margin-bottom: 20px; }
+  .chain-proof-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* MODAL ACTION BUTTONS */
+  .modal-view-btn { display: block; width: 100%; padding: 14px; background: var(--ink); color: var(--parchment); border: none; border-radius: var(--radius-sm); font-family: 'Cormorant Garamond', serif; font-size: 18px; cursor: pointer; text-decoration: none; text-align: center; margin-bottom: 10px; transition: background 0.2s; }
+  .modal-view-btn:hover { background: #2d2520; }
+  .share-link-box { display: flex; gap: 8px; margin-bottom: 10px; }
+  .share-link-box input { flex: 1; font-size: 12px; padding: 10px 12px; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: monospace; outline: none; }
+  .copy-btn { padding: 10px 16px; background: var(--ink); color: var(--parchment); border: none; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: background 0.2s; }
+  .copy-btn:hover { background: #2d2520; }
+  .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .share-btn { padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--cream); font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--ink); transition: all 0.2s; }
+  .share-btn:hover { border-color: var(--gold); background: var(--gold-pale); }
+
+  footer { text-align: center; padding: 32px 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--chain-light); letter-spacing: 0.05em; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="eternalwishes.html" class="top-nav-brand">Eternal Wishes</a>
+  <div class="top-nav-links">
+    <a href="moments.html">Moments</a>
+    <div class="wallet-bar">
+      <button class="wallet-connect-btn" id="myWishesBtn" onclick="openMyWishes()" style="display:none;background:var(--cream);color:var(--ink);border:1px solid rgba(255,255,255,0.15);">
+        ✦ My Wishes
+      </button>
+      <button class="wallet-connect-btn" id="walletBtn" onclick="toggleWallet()">
+        <span class="wallet-dot" id="walletDot"></span>
+        <span id="walletLabel">Connect Wallet</span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div style="display:none;">
+  <button id="disconnectBtn" onclick="toggleWallet()"></button>
+</div>
+
+<!-- My Wishes Modal -->
+<div class="modal-overlay" id="myWishesModal">
+  <div class="modal" style="max-width:560px;max-height:80vh;overflow-y:auto;">
+    <button class="modal-close" onclick="document.getElementById('myWishesModal').classList.remove('visible')">✕</button>
+    <div class="modal-seal" style="font-size:20px;">✦</div>
+    <h2 style="margin-bottom:6px;">My Wishes</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Wishes minted from this wallet</p>
+
+    <!-- Search bar -->
+    <div style="position:relative;margin-bottom:14px;">
+      <input type="text" id="wishSearchInput" placeholder="Search by name, occasion, or message…"
+             oninput="filterMyWishes()"
+             style="width:100%;padding:10px 14px 10px 34px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;background:var(--cream);color:var(--ink);outline:none;transition:border-color 0.2s;"
+             onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none;">🔍</span>
+    </div>
+
+    <!-- Results count -->
+    <div id="wishSearchCount" style="display:none;font-size:11px;color:var(--muted);margin-bottom:10px;"></div>
+
+    <div id="myWishesList" style="display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto;"></div>
+    <p id="myWishesEmpty" style="display:none;font-size:13px;color:var(--muted);text-align:center;padding:20px 0;">No wishes found yet. Mint your first one!</p>
+  </div>
+</div>
+
+<header>
+  <div class="logo-chain">
+    <div class="chain-link"></div><div class="logo-dot"></div>
+    <div class="chain-link"></div><div class="logo-dot"></div>
+    <div class="chain-link"></div>
+  </div>
+  <h1>Eternal <em>Wishes</em></h1>
+  <p class="tagline">Sealed on the blockchain · Remembered forever</p>
+  <div class="trust-pills">
+    <span class="pill">No login</span><span class="pill">No tracking</span>
+    <span class="pill">No storage</span><span class="pill">Forever on-chain</span>
+    <span class="pill">Base network</span>
+  </div>
+</header>
+
+<main>
+  <!-- STEP 1: OCCASION -->
+  <div style="animation: fadeUp 0.5s 0.1s both;">
+    <p class="section-label">Step 1 — Choose the occasion</p>
+    <div class="occasions" id="occasionGrid">
+      <button class="occasion-btn active" data-occasion="birthday" onclick="selectOccasion(this)"><span class="occasion-icon">🎂</span><span class="occasion-name">Birthday</span></button>
+      <button class="occasion-btn" data-occasion="anniversary" onclick="selectOccasion(this)"><span class="occasion-icon">💍</span><span class="occasion-name">Anniversary</span></button>
+      <button class="occasion-btn" data-occasion="wedding" onclick="selectOccasion(this)"><span class="occasion-icon">💐</span><span class="occasion-name">Wedding</span></button>
+      <button class="occasion-btn" data-occasion="newbaby" onclick="selectOccasion(this)"><span class="occasion-icon">👶</span><span class="occasion-name">New Baby</span></button>
+      <button class="occasion-btn" data-occasion="graduation" onclick="selectOccasion(this)"><span class="occasion-icon">🎓</span><span class="occasion-name">Graduation</span></button>
+      <button class="occasion-btn" data-occasion="promotion" onclick="selectOccasion(this)"><span class="occasion-icon">🚀</span><span class="occasion-name">Promotion</span></button>
+      <button class="occasion-btn" data-occasion="newyear" onclick="selectOccasion(this)"><span class="occasion-icon">✨</span><span class="occasion-name">New Year</span></button>
+      <button class="occasion-btn" data-occasion="memorial" onclick="selectOccasion(this)"><span class="occasion-icon">🕯️</span><span class="occasion-name">In Memory</span></button>
+      <button class="occasion-btn" data-occasion="custom" onclick="selectOccasion(this)"><span class="occasion-icon">📌</span><span class="occasion-name">Preserve</span></button>
+    </div>
+  </div>
+
+  <div class="section-divider" style="animation: fadeUp 0.5s 0.15s both;"><span class="divider-ornament">✦</span></div>
+
+  <!-- STEP 2: WISH DETAILS -->
+  <div style="animation: fadeUp 0.5s 0.2s both;">
+    <p class="section-label">Step 2 — Write the wish</p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="recipientName">To (name)</label>
+        <input type="text" id="recipientName" placeholder="Ravi Kumar" maxlength="60">
+      </div>
+      <div class="field">
+        <label for="recipientWallet">Recipient wallet (optional)</label>
+        <input type="text" id="recipientWallet" placeholder="0x1234…abcd or ENS">
+      </div>
+      <div class="field full">
+        <label for="wishMessage">Your eternal message</label>
+        <textarea id="wishMessage" rows="4" maxlength="280" placeholder="Write something they will read forever…" oninput="updateCharCount()"></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 280</div>
+      </div>
+      <div class="field">
+        <label for="senderName">From (your name — optional)</label>
+        <input type="text" id="senderName" placeholder="Anonymous or your name">
+      </div>
+      <div class="field">
+        <label for="wishDate">Date to display</label>
+        <input type="date" id="wishDate">
+      </div>
+    </div>
+
+    <!-- Image upload (Premium + Eternal) — appears after tier selection -->
+    <div id="premiumFields" class="premium-fields">
+      <p class="section-label" style="margin-bottom:10px;">
+        <span id="premiumLabelText">✦ Premium features — make your wish unforgettable</span>
+      </p>
+
+      <label style="font-size:12px;color:var(--gold);margin-bottom:6px;display:block;">Add a photo</label>
+      <div class="image-upload-area" id="uploadArea" onclick="triggerImageUpload()">
+        <img id="uploadPreview" class="upload-preview" src="" alt="Preview">
+        <div class="upload-placeholder" id="uploadPlaceholder">
+          <span>📷</span>
+          Tap to add a photo to your wish
+        </div>
+        <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(event)">
+      </div>
+
+      <!-- Position sliders -->
+      <div id="positionSliders" style="display:none;margin-top:12px;background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;">
+        <label style="font-size:11px;color:var(--chain);text-transform:uppercase;letter-spacing:0.1em;">Adjust photo position</label>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+          <span style="font-size:11px;color:var(--muted);min-width:50px;">Top↕Bot</span>
+          <input type="range" id="posY" min="0" max="100" value="50" style="flex:1;" oninput="updateImagePosition()">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <span style="font-size:11px;color:var(--muted);min-width:50px;">Left↔Right</span>
+          <input type="range" id="posX" min="0" max="100" value="50" style="flex:1;" oninput="updateImagePosition()">
+        </div>
+        <div style="text-align:right;margin-top:6px;">
+          <button onclick="document.getElementById('posY').value=50;document.getElementById('posX').value=50;updateImagePosition();" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;">↻ Reset position</button>
+        </div>
+      </div>
+
+      <!-- Voice note (Eternal only) -->
+      <div id="voiceNoteSection" style="display:none;margin-top:16px;">
+        <label style="font-size:12px;color:var(--gold);margin-bottom:6px;display:block;">Record a voice note</label>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button id="recordBtn" onclick="toggleRecording()" style="width:44px;height:44px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <span id="recordIcon" style="color:var(--gold-light);font-size:18px;">🎙️</span>
+          </button>
+          <div>
+            <div id="recordLabel" style="font-size:13px;color:var(--ink);">Tap to record</div>
+            <div id="recordTimer" style="font-size:11px;color:var(--muted);">Max 30 seconds</div>
+          </div>
+        </div>
+        <canvas id="waveformCanvas" width="300" height="50" style="display:none;width:100%;height:50px;margin-top:10px;border-radius:6px;background:var(--cream);"></canvas>
+        <audio id="audioPlayback" controls style="display:none;width:100%;margin-top:10px;"></audio>
+        <div id="audioHashDisplay" style="display:none;font-size:10px;color:var(--muted);margin-top:6px;word-break:break-all;"></div>
+      </div>
+
+      <span id="cropHint" style="display:none;"></span>
+    </div>
+
+  </div>
+
+  <div class="section-divider" style="animation: fadeUp 0.5s 0.25s both;"><span class="divider-ornament">✦</span></div>
+
+  <!-- STEP 3: TIER -->
+  <div style="animation: fadeUp 0.5s 0.3s both;">
+    <p class="section-label">Step 3 — Choose your tier</p>
+
+    <!-- Compact tier selector (default: Basic) -->
+    <div id="compactTier" style="background:var(--cream);border:1.5px solid var(--gold);border-radius:var(--radius);padding:16px 18px;cursor:pointer;transition:all 0.2s;" onclick="toggleTierExpand()">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:18px;" id="compactTierName">Basic</span>
+          <span style="font-size:14px;color:var(--gold);margin-left:8px;" id="compactTierPrice">~$0.15</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:4px;">/ wish</span>
+        </div>
+        <span style="font-size:12px;color:var(--gold);font-weight:500;" id="tierExpandLabel">Change ▾</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;" id="compactTierDesc">Simple & permanent · Text wish card</div>
+    </div>
+
+    <!-- Expandable tier cards (hidden by default on mobile) -->
+    <div id="tierExpand" style="display:none;margin-top:12px;">
+    <div class="tiers">
+
+      <!-- BASIC -->
+      <div class="tier-card active" data-tier="basic" data-price="0.15" onclick="selectTier(this)">
+        <div class="tier-name">Basic</div>
+        <div class="tier-price">~$0.15 <span>/ wish</span></div>
+        <div class="tier-tagline">Simple & permanent</div>
+        <ul class="tier-features">
+          <li>Beautiful text wish card</li>
+          <li>Permanent on-chain</li>
+          <li>Timestamped forever</li>
+          <li>Shareable link</li>
+        </ul>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="tier-card" data-tier="premium" data-price="0.39" onclick="selectTier(this)">
+        <div class="tier-popular">Most popular</div>
+        <div class="tier-name">Premium</div>
+        <div class="tier-price">~$0.39 <span>/ wish</span></div>
+        <div class="tier-tagline">Make it unforgettable</div>
+        <ul class="tier-features">
+          <li>Add a photo</li>
+          <li>Animated card reveal</li>
+          <li>✦ Premium badge on wish</li>
+          <li>Permanent on-chain</li>
+          <li>Shareable link</li>
+        </ul>
+      </div>
+
+      <!-- ETERNAL -->
+      <div class="tier-card" data-tier="eternal" data-price="0.79" onclick="selectTier(this)">
+        <div class="tier-name">Eternal</div>
+        <div class="tier-price">~$0.79 <span>/ wish</span></div>
+        <div class="tier-tagline">The ultimate wish</div>
+        <ul class="tier-features">
+          <li>Everything in Premium</li>
+          <li>Voice note sealed on-chain</li>
+          <li>Custom photo crop</li>
+          <li>✦✦ Eternal badge</li>
+          <li>Priority minting</li>
+          <li>Permanent on-chain</li>
+          <li>Shareable link</li>
+        </ul>
+      </div>
+
+    </div>
+    </div>
+
+    <p class="section-label">Step 4 — Pay & mint forever</p>
+    <div class="payment-options">
+      <button class="pay-btn active" data-method="crypto" onclick="selectPayment(this)">
+        <div class="pay-icon">🦊</div>
+        <div>
+          <div class="pay-label">Crypto Wallet</div>
+          <div class="pay-sub">MetaMask, WalletConnect</div>
+        </div>
+      </button>
+      <button class="pay-btn" data-method="upi" onclick="selectPayment(this)">
+        <div class="pay-icon">🇮🇳</div>
+        <div>
+          <div class="pay-label">UPI / Card</div>
+          <div class="pay-sub">GPay, PhonePe, Credit Card</div>
+        </div>
+      </button>
+    </div>
+
+    <div class="payment-info" id="upiInfo">
+      <strong>UPI / Card:</strong> Pay ~$<span id="upiPrice">0.15</span> — converted to ETH and your wish is minted on Base automatically. No wallet needed. Temporary session (~2 min) deleted after minting.
+    </div>
+    <div class="payment-info visible" id="cryptoInfo">
+      <strong>Crypto wallet:</strong> Connect MetaMask, sign the transaction. Fully trustless — no backend involved.<br><br>
+      <div style="background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;line-height:1.7;">
+        <div><span style="font-weight:600;color:var(--ink);">🔒 Safe & simple</span><span style="color:var(--muted);"> · No approvals · Pay once · <a href="https://basescan.org/address/0xC51b7B6B4af1B62dc604324c89b386b10F67716D#code" target="_blank" style="color:var(--gold);">Verified contract</a></span></div>
+        <div style="color:var(--muted);margin-top:4px;">• No wallet permissions requested — just a simple ETH transfer<br>• Tip: use a fresh wallet if you prefer extra caution</div>
+      </div>
+    </div>
+
+    <button class="mint-btn" id="mintBtn" onclick="handleMint()">
+      Seal this wish forever →
+    </button>
+    <p class="mint-note">Paid in ETH · Gas < $0.01 · Base blockchain · Cannot be deleted · Ever</p>
+  </div>
+
+  <!-- PUBLIC MOMENTS SECTION -->
+  <div style="text-align:center;padding:30px 20px 10px;border-top:1px solid var(--border);margin-top:30px;">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(24px,5vw,36px);font-weight:300;margin-bottom:8px;">🌍 Public Moments</h2>
+    <p style="font-size:14px;color:var(--muted);max-width:440px;margin:0 auto 18px;line-height:1.5;">Join others in sending wishes for special occasions</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="moments.html" style="display:inline-block;padding:12px 24px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--ink);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.background='var(--gold-pale)'" onmouseout="this.style.borderColor='';this.style.background=''">Explore Moments</a>
+      <a href="create-moment.html" style="display:inline-block;padding:12px 24px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--ink);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.background='var(--gold-pale)'" onmouseout="this.style.borderColor='';this.style.background=''">Create a Moment</a>
+    </div>
+    <p style="font-size:11px;color:var(--chain-light);margin-top:10px;">Anyone can join a moment and add their wish</p>
+  </div>
+
+  <!-- FEED -->
+  <div class="feed-section" style="animation: fadeUp 0.5s 0.5s both;">
+    <div class="feed-header">
+      <h2 class="feed-title">Recently sealed wishes</h2>
+      <span class="feed-count" id="feedCount"></span>
+    </div>
+    <div id="feedLoading" style="text-align:center;padding:30px 0;color:var(--muted);font-size:13px;">
+      <div style="display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div>
+      Loading wishes from Base blockchain…
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    <div class="feed-grid" id="wishFeed"></div>
+  </div>
+</main>
+
+<!-- Processing Overlay -->
+<div class="processing-overlay" id="processingOverlay">
+  <div class="spinner"></div>
+  <div class="processing-text" id="processingText">Sealing your wish…</div>
+  <div class="processing-sub" id="processingSub">Broadcasting to Base</div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-seal">✦</div>
+    <h2>Wish sealed forever</h2>
+    <p>Your wish is now on the Base blockchain. Permanent, immutable, eternal.</p>
+    <div class="wish-preview">
+      <div class="wish-preview-label">Your eternal message</div>
+      <div class="wish-preview-text" id="previewMessage"></div>
+    </div>
+    <div id="successAudioInfo" style="display:none;font-size:11px;color:var(--chain);background:var(--gold-pale);border:1px solid rgba(201,151,58,0.3);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:12px;"></div>
+    <div class="chain-proof">
+      <div class="chain-proof-dot"></div>
+      <span>Confirmed · Token #<span id="tokenId">—</span> · Base</span>
+    </div>
+
+    <!-- VIEW WISH — primary action -->
+    <a id="viewWishBtn" href="wish.html" class="modal-view-btn">
+      View your eternal wish →
+    </a>
+
+    <!-- SHARE LINK -->
+    <div class="share-link-box">
+      <input type="text" id="wishLink" readonly>
+      <button class="copy-btn" onclick="copyLink()">Copy</button>
+    </div>
+    <div class="share-btns">
+      <button class="share-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
+      <button class="share-btn" onclick="shareTwitter()">𝕏 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPI Coming Soon Modal -->
+<div class="modal-overlay" id="upiComingSoonModal">
+  <div class="modal" style="max-width:440px;text-align:center;">
+    <button class="modal-close" onclick="document.getElementById('upiComingSoonModal').classList.remove('visible')">✕</button>
+    <div class="modal-seal" style="font-size:24px;">🇮🇳</div>
+    <h2 style="margin-bottom:10px;">UPI / Card — Coming Soon</h2>
+    <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;">
+      We're integrating UPI, GPay, PhonePe and Credit Card payments via Onramp.money.<br><br>
+      <strong style="color:var(--ink);">For now, use Crypto Wallet payment</strong> — it takes just 2 seconds on Base and costs less than $0.01 in gas.
+    </p>
+    <button onclick="switchToCrypto()" style="width:100%;padding:14px;background:var(--ink);color:var(--parchment);border:none;border-radius:var(--radius-sm);font-family:'Cormorant Garamond',serif;font-size:18px;cursor:pointer;">
+      Switch to Crypto Wallet →
+    </button>
+    <p style="font-size:11px;color:var(--chain-light);margin-top:10px;">Need a wallet? Install MetaMask free at metamask.io</p>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:32px 20px;border-top:1px solid var(--border);font-size:12px;color:var(--chain-light);letter-spacing:0.05em;">
+  <div style="margin-bottom:8px;">Eternal Wishes · Base blockchain · No login · No tracking · No personal data stored</div>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a href="how-it-works.html" style="color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">How it works</a>
+    <a href="privacy.html" style="color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">Privacy</a>
+    <a href="terms.html" style="color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">Terms</a>
+  </div>
+</footer>
+
+
+
+<style>
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+</style>
+
+<!-- External scripts loaded FIRST so PINATA and EternalWishes are available -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<script src="storage.js"></script>
+<script src="contract-integration.js"></script>
+
+<script>
+  const state = {
+    occasion:'birthday', tier:'basic', tierPrice:0.15,
+    paymentMethod:'crypto', walletConnected:false, walletAddress:null,
+    theme:'classic', imageData:null, croppedImageData:null,
+    audioBlob:null, audioHash:null, audioURL:null, audioBase64:null,  // audioHash = SHA-256 = audioProof field
+    isRecording:false, mediaRecorder:null, recordChunks:[],
+    recordInterval:null, recordSeconds:0,
+    cropImg:null, cropScale:1, imagePosX:50, imagePosY:50,
+    cropState:{ x:0,y:0,w:0,h:0,dragging:false,startX:0,startY:0 },
+  };
+
+  function buildWishURL(tokenId) {
+    const origin = window.location.origin;
+    const path = window.location.pathname;
+    const dir = path.substring(0, path.lastIndexOf('/') + 1);
+    return `${origin}${dir}wish.html?id=${tokenId}`;
+  }
+
+
+  // OCCASION
+  function selectOccasion(el) {
+    document.querySelectorAll('.occasion-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active'); state.occasion=el.dataset.occasion;
+
+    // Update placeholder and labels based on occasion type
+    const msgEl = document.getElementById('wishMessage');
+    const recipEl = document.getElementById('recipientName');
+    const msgLabel = document.querySelector('label[for="wishMessage"]');
+    const recipLabel = recipEl?.previousElementSibling || recipEl?.parentElement?.querySelector('label');
+
+    if (state.occasion === 'custom') {
+      msgEl.placeholder = 'Paste a tweet, message, or moment you want to preserve forever…';
+      msgLabel.textContent = 'What do you want to preserve?';
+      recipEl.placeholder = 'Person, project, or @handle';
+    } else {
+      msgEl.placeholder = 'Write something they will read forever…';
+      msgLabel.textContent = 'Your eternal message';
+      recipEl.placeholder = 'Ravi Kumar';
+    }
+  }
+
+  // TIER — shows/hides premium and eternal exclusive sections
+  function toggleTierExpand() {
+    const expand = document.getElementById('tierExpand');
+    const label = document.getElementById('tierExpandLabel');
+    if (expand.style.display === 'none') {
+      expand.style.display = 'block';
+      label.textContent = 'Collapse ▴';
+    } else {
+      expand.style.display = 'none';
+      label.textContent = 'Change ▾';
+    }
+  }
+
+  function updateCompactTier(tierName, price, desc) {
+    document.getElementById('compactTierName').textContent = tierName;
+    document.getElementById('compactTierPrice').textContent = price;
+    document.getElementById('compactTierDesc').textContent = desc;
+    // Collapse the expanded view
+    document.getElementById('tierExpand').style.display = 'none';
+    document.getElementById('tierExpandLabel').textContent = 'Change ▾';
+  }
+
+  function selectTier(el) {
+    document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+    state.tier=el.dataset.tier; state.tierPrice=parseFloat(el.dataset.price);
+    document.getElementById('upiPrice').textContent=state.tierPrice;
+    // Update compact tier display
+    const tierNames = {basic:'Basic', premium:'Premium', eternal:'Eternal'};
+    const tierDescs = {basic:'Simple & permanent · Text wish card', premium:'Photo + premium badge · Make it unforgettable', eternal:'Photo + voice + eternal badge · The ultimate wish'};
+    const tierPrices = {basic:'~$0.15', premium:'~$0.39', eternal:'~$0.79'};
+    updateCompactTier(tierNames[state.tier], tierPrices[state.tier], tierDescs[state.tier]);
+
+    // Auto-scroll to premium features on mobile when Premium/Eternal selected
+    if (['premium','eternal'].includes(state.tier)) {
+      setTimeout(() => {
+        document.getElementById('premiumFields').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 350);  // small delay for expand animation to finish
+    }
+    const isPrem=['premium','eternal'].includes(state.tier);
+    const isEternal=state.tier==='eternal';
+    document.getElementById('premiumFields').classList.toggle('visible', isPrem);
+    document.getElementById('voiceNoteSection').style.display=isEternal?'block':'none';
+    document.getElementById('cropHint').style.display=isEternal?'inline':'none';
+    document.getElementById('premiumLabelText').textContent=isEternal
+      ?'✦✦ Eternal features — the ultimate wish':'✦ Premium features — make your wish unforgettable';
+    // Show crop tool for Eternal if image already uploaded
+    if(state.cropImg&&isEternal){ initCropTool(state.cropImg); try { document.getElementById('positionSliders').style.display='block'; } catch(e) {} }
+    if(!isEternal) try { document.getElementById('positionSliders').style.display='none'; } catch(e) {}
+  }
+
+  function selectTheme(el) {
+    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active'); state.theme=el.dataset.theme;
+  }
+
+  function triggerImageUpload(){ document.getElementById('imageInput').click(); }
+
+  function handleImageUpload(e) {
+    const file=e.target.files[0]; if(!file) return;
+    if(file.size>5*1024*1024){alert('Image must be under 5MB');return;}
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      state.imageData=ev.target.result;
+      state.croppedImageData=null;
+
+      // Smart default: detect portrait (face) photos and start Y at 25%
+      // so the face frames correctly without needing slider adjustment
+      const tempImg=new Image();
+      tempImg.onload=()=>{
+        const isPortrait=tempImg.naturalHeight>tempImg.naturalWidth;
+        const defaultY=isPortrait?25:50;
+        state.imagePosX=50; state.imagePosY=defaultY;
+
+        const preview=document.getElementById('uploadPreview');
+        preview.src=ev.target.result;
+        preview.style.display='block';
+        preview.style.maxHeight='400px';
+        preview.style.width='100%';
+        preview.style.height='auto';
+        preview.style.objectFit='contain';
+        preview.style.objectPosition='center';
+
+        document.getElementById('uploadPlaceholder').style.display='none';
+        document.getElementById('uploadArea').classList.add('has-image');
+        document.getElementById('uploadArea').onclick=null;
+
+        document.getElementById('positionSliders').style.display='block';
+        document.getElementById('imgPosX').value=50;
+        document.getElementById('imgPosY').value=defaultY;
+
+        // Show crop tool for Eternal tier
+        if(state.tier==='eternal'){
+          state.cropImg=tempImg;
+          initCropTool(tempImg);
+          try { document.getElementById('positionSliders').style.display='block'; } catch(e) {}
+          document.getElementById('cropHint').style.display='inline';
+        }
+      };
+      tempImg.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+
+  function updateImagePosition(){
+    const x=document.getElementById('imgPosX').value;
+    const y=document.getElementById('imgPosY').value;
+    state.imagePosX=Number(x);
+    state.imagePosY=Number(y);
+    document.getElementById('uploadPreview').style.objectPosition=`${x}% ${y}%`;
+  }
+
+  function resetImagePosition(){
+    state.imagePosX=50; state.imagePosY=50;
+    document.getElementById('imgPosX').value=50;
+    document.getElementById('imgPosY').value=50;
+    document.getElementById('uploadPreview').style.objectPosition='50% 50%';
+  }
+
+  // CROP TOOL
+  function initCropTool(img) {
+    const canvas=document.getElementById('cropCanvas');
+    const container=document.getElementById('cropContainer');
+    const maxW=container.clientWidth||520;
+    const scale=Math.min(1,maxW/img.width);
+    canvas.width=Math.round(img.width*scale);
+    canvas.height=Math.round(img.height*scale);
+    state.cropScale=scale;
+    state.cropState={x:0,y:0,w:0,h:0,dragging:false,startX:0,startY:0};
+    drawCropCanvas();
+    canvas.onmousedown=cropStart; canvas.onmousemove=cropMove; canvas.onmouseup=cropEnd;
+    canvas.ontouchstart=e=>cropStart(e.touches[0]);
+    canvas.ontouchmove=e=>{e.preventDefault();cropMove(e.touches[0]);};
+    canvas.ontouchend=cropEnd;
+  }
+
+  function canvasXY(e){const r=document.getElementById('cropCanvas').getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+  function cropStart(e){const{x,y}=canvasXY(e);state.cropState={...state.cropState,dragging:true,startX:x,startY:y,x,y,w:0,h:0};}
+  function cropMove(e){if(!state.cropState.dragging)return;const{x,y}=canvasXY(e);state.cropState.w=x-state.cropState.startX;state.cropState.h=y-state.cropState.startY;drawCropCanvas();}
+  function cropEnd(){state.cropState.dragging=false;}
+
+  function drawCropCanvas(){
+    const canvas=document.getElementById('cropCanvas'),ctx=canvas.getContext('2d'),img=state.cropImg,cs=state.cropState;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    if(Math.abs(cs.w)>4&&Math.abs(cs.h)>4){
+      ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,0,canvas.width,canvas.height);
+      const rx=cs.w>0?cs.x:cs.x+cs.w,ry=cs.h>0?cs.y:cs.y+cs.h,rw=Math.abs(cs.w),rh=Math.abs(cs.h);
+      ctx.drawImage(img,rx/state.cropScale,ry/state.cropScale,rw/state.cropScale,rh/state.cropScale,rx,ry,rw,rh);
+      ctx.strokeStyle='#c9973a';ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.strokeRect(rx,ry,rw,rh);ctx.setLineDash([]);
+    }
+  }
+
+  function applyCrop(){
+    const cs=state.cropState;
+    if(Math.abs(cs.w)<20||Math.abs(cs.h)<20){alert('Please drag a larger crop area.');return;}
+    const rx=cs.w>0?cs.x:cs.x+cs.w,ry=cs.h>0?cs.y:cs.y+cs.h,rw=Math.abs(cs.w),rh=Math.abs(cs.h);
+    const out=document.createElement('canvas');out.width=rw;out.height=rh;
+    out.getContext('2d').drawImage(state.cropImg,rx/state.cropScale,ry/state.cropScale,rw/state.cropScale,rh/state.cropScale,0,0,rw,rh);
+    state.croppedImageData=out.toDataURL('image/jpeg',0.88);
+    document.getElementById('uploadPreview').src=state.croppedImageData;
+    try { document.getElementById('positionSliders').style.display='none'; } catch(e) {}
+    document.getElementById('uploadArea').onclick=()=>{initCropTool(state.cropImg);try { document.getElementById('positionSliders').style.display='block'; } catch(e) {}};
+  }
+
+  function resetCrop(){
+    state.croppedImageData=null;
+    document.getElementById('uploadPreview').src=state.imageData;
+    initCropTool(state.cropImg);
+  }
+
+  // VOICE RECORDER
+  async function toggleRecording(){
+    if(state.isRecording){stopRecording();return;}
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      state.recordChunks=[];state.recordSeconds=0;
+      // Use mp4 on Safari (iOS), webm on Chrome/Firefox
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/mp4')
+          ? 'audio/mp4'
+          : '';
+      const mr = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+      state.mediaRecorder = mr;
+      state.audioMimeType = mr.mimeType || 'audio/webm';
+      const actx=new AudioContext(),analyser=actx.createAnalyser();
+      actx.createMediaStreamSource(stream).connect(analyser);
+      analyser.fftSize=256;const buf=new Uint8Array(analyser.frequencyBinCount);
+      const wc=document.getElementById('waveformCanvas');wc.style.display='block';
+      const wctx=wc.getContext('2d');let animId;
+      function drawWave(){
+        animId=requestAnimationFrame(drawWave);
+        analyser.getByteTimeDomainData(buf);
+        wctx.fillStyle='#f4efe6';wctx.fillRect(0,0,wc.width,wc.height);
+        wctx.beginPath();wctx.strokeStyle='#c9973a';wctx.lineWidth=2;
+        const sw=wc.width/buf.length;let x=0;
+        for(let i=0;i<buf.length;i++){const v=buf[i]/128,y=(v*wc.height)/2;i===0?wctx.moveTo(x,y):wctx.lineTo(x,y);x+=sw;}
+        wctx.lineTo(wc.width,wc.height/2);wctx.stroke();
+      }
+      drawWave();
+      mr.ondataavailable=e=>{if(e.data.size>0)state.recordChunks.push(e.data);};
+      mr.onstop=async()=>{
+        cancelAnimationFrame(animId);actx.close();stream.getTracks().forEach(t=>t.stop());
+        const blob=new Blob(state.recordChunks,{type:state.audioMimeType||'audio/webm'});
+        state.audioBlob=blob;
+        state.audioURL=URL.createObjectURL(blob);  // for playback in current tab
+        const ap=document.getElementById('audioPlayback');ap.src=state.audioURL;ap.style.display='block';
+
+        // Convert blob to base64 and store in localStorage so wish.html can play it
+        // Blob URLs die when the tab changes — base64 persists across navigation
+        const reader = new FileReader();
+        reader.onload = ev => {
+          state.audioBase64 = ev.target.result;  // data:audio/webm;base64,...
+        };
+        reader.readAsDataURL(blob);
+
+        // SHA-256 hash
+        const hashBuf=await crypto.subtle.digest('SHA-256',await blob.arrayBuffer());
+        state.audioHash=Array.from(new Uint8Array(hashBuf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        const ahd=document.getElementById('audioHashDisplay');ahd.textContent='Voice proof: '+state.audioHash.slice(0,10)+'…'+state.audioHash.slice(-8);ahd.style.display='block';
+      };
+      mr.start(100);state.isRecording=true;
+      document.getElementById('recordBtn').style.background='#dc2626';
+      document.getElementById('recordLabel').textContent='Stop recording';
+      document.getElementById('recordIcon').style.animation='pulse 0.8s infinite';
+      state.recordInterval=setInterval(()=>{
+        state.recordSeconds++;
+        const s=state.recordSeconds;
+        document.getElementById('recordTimer').textContent=`${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+        if(s>=30)stopRecording();
+      },1000);
+    }catch(err){alert('Microphone access needed. Please allow it in your browser.');}
+  }
+
+  function stopRecording(){
+    if(state.mediaRecorder&&state.mediaRecorder.state!=='inactive')state.mediaRecorder.stop();
+    clearInterval(state.recordInterval);state.isRecording=false;
+    document.getElementById('recordBtn').style.background='var(--ink)';
+    document.getElementById('recordLabel').textContent='Record voice note';
+    document.getElementById('recordIcon').style.animation='';
+  }
+
+  function clearRecording(){
+    state.audioBlob=null;state.audioHash=null;state.audioURL=null;state.audioBase64=null;state.recordSeconds=0;state.recordChunks=[];
+    document.getElementById('playbackUI').style.display='none';
+    document.getElementById('recorderUI').style.display='flex';
+    document.getElementById('recordTimer').textContent='0:00';
+    document.getElementById('waveformCanvas').style.display='none';
+  }
+
+  function selectPayment(el){
+    document.querySelectorAll('.pay-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');state.paymentMethod=el.dataset.method;
+    document.getElementById('upiInfo').classList.toggle('visible',state.paymentMethod==='upi');
+    document.getElementById('cryptoInfo').classList.toggle('visible',state.paymentMethod==='crypto');
+    document.getElementById('mintBtn').textContent=(state.paymentMethod==='crypto'&&!state.walletConnected)?'Connect wallet to mint →':'Seal this wish forever →';
+  }
+
+  function toggleWallet(){
+    if(state.walletConnected){
+      // "Disconnect" — clear local state and flag for forced account picker on reconnect
+      state.walletConnected=false;
+      state.walletAddress=null;
+      EternalWishes.signer=null;
+      EternalWishes.contract=null;
+      EternalWishes._wasDisconnected=true;
+      document.getElementById('walletDot').classList.remove('connected');
+      document.getElementById('walletLabel').textContent='Connect Wallet';
+      document.getElementById('myWishesBtn').style.display='none';
+      try{document.getElementById('disconnectBtn').style.display='none';}catch(e){}
+      if(state.paymentMethod==='crypto')document.getElementById('mintBtn').textContent='Connect wallet to mint →';
+    }else{
+      connectWallet();
+    }
+  }
+
+  async function connectWallet(){
+    // Wait for EternalWishes to finish loading
+    let attempts = 0;
+    while (typeof EternalWishes === 'undefined' && attempts < 30) {
+      await new Promise(r => setTimeout(r, 100));
+      attempts++;
+    }
+    if (typeof EternalWishes === 'undefined') {
+      alert('Page still loading. Please wait a moment and try again.');
+      return;
+    }
+    try {
+      const address = await EternalWishes.connectWallet();
+      updateWalletUI(address);
+
+      // Hook into account change callbacks
+      EternalWishes._onAccountChange = function(addr) {
+        updateWalletUI(addr);
+      };
+      EternalWishes._onDisconnect = function() {
+        state.walletConnected=false;
+        state.walletAddress=null;
+        document.getElementById('walletDot').classList.remove('connected');
+        document.getElementById('walletLabel').textContent='Connect Wallet';
+        document.getElementById('myWishesBtn').style.display='none';
+        try{document.getElementById('disconnectBtn').style.display='none';}catch(e){}
+        if(state.paymentMethod==='crypto')document.getElementById('mintBtn').textContent='Connect wallet to mint →';
+      };
+    } catch(e) {
+      alert('Could not connect wallet: ' + e.message);
+    }
+  }
+
+  function updateWalletUI(address){
+    try{document.getElementById('disconnectBtn').style.display='block';}catch(e){}
+    state.walletConnected=true;
+    state.walletAddress=address;
+    document.getElementById('walletDot').classList.add('connected');
+    document.getElementById('walletLabel').textContent=address.slice(0,6)+'…'+address.slice(-4);
+    document.getElementById('myWishesBtn').style.display='block';
+    if(state.paymentMethod==='crypto')document.getElementById('mintBtn').textContent='Seal this wish forever →';
+  }
+
+  function updateCharCount(){document.getElementById('charCount').textContent=document.getElementById('wishMessage').value.length;}
+
+  function validate(){
+    const name=document.getElementById('recipientName').value.trim();
+    const msg=document.getElementById('wishMessage').value.trim();
+    if(!name){alert('Please enter the recipient\'s name.');return false;}
+    if(msg.length<10){alert('Please write at least 10 characters.');return false;}
+    if(state.paymentMethod==='crypto'&&!state.walletConnected){connectWallet();return false;}
+    return true;
+  }
+
+  async function handleMint(){if(!validate())return;state.paymentMethod==='upi'?await handleUPIFlow():await handleCryptoFlow();}
+
+  async function handleUPIFlow(){
+    // UPI/Card gateway not yet integrated — show clear message instead of fake-minting
+    document.getElementById('upiComingSoonModal').classList.add('visible');
+  }
+
+  async function handleCryptoFlow(){
+    const wish = collectWishData();
+
+    // ── Step 1: Connect wallet ──────────────────────────────────────────
+    showProcessing('Connecting wallet…', 'Please approve in MetaMask');
+    try {
+      await EternalWishes.connectWallet();
+    } catch(e) {
+      hideProcessing();
+      alert('Wallet connection failed: ' + e.message);
+      return;
+    }
+
+    // ── Step 2: Upload image to IPFS (Premium + Eternal) ───────────────
+    if (wish.imageData && ['premium','eternal'].includes(wish.tier)) {
+      showProcessing('Uploading photo to IPFS…', 'Storing permanently on IPFS + Filecoin');
+      try {
+        wish.imageURL = await STORAGE.uploadImage(wish.imageData, 'wish-image.jpg');
+        // imageURL is now an HTTPS gateway URL — works on Basescan, OpenSea, all browsers
+      } catch(e) {
+        hideProcessing();
+        alert('Image upload failed: ' + e.message + '\n\nCheck your internet connection and try again.');
+        return;
+      }
+    }
+
+    // ── Step 3: Upload audio to IPFS (Eternal only) ────────────────────
+    if (wish.tier === 'eternal' && state.audioBlob) {
+      showProcessing('Uploading voice note to IPFS…', 'Storing audio permanently on IPFS + Filecoin');
+      try {
+        const audioIPFS = await STORAGE.uploadAudio(state.audioBlob, 'wish-voice.webm');
+        wish.audioCID = audioIPFS;      // IPFS CID → goes on-chain for cross-device playback
+        wish.audioIPFSURL = audioIPFS;  // also kept for localStorage
+        // audioProof (SHA-256) is state.audioHash — also goes on-chain as verification
+      } catch(e) {
+        hideProcessing();
+        alert('Audio upload failed: ' + e.message + '\n\nCheck your internet connection and try again.');
+        return;
+      }
+    }
+
+    // ── Step 4: Mint on-chain ───────────────────────────────────────────
+    showProcessing('Confirm in your wallet…', 'Check MetaMask for the transaction');
+    try {
+      const result = await EternalWishes.mintCrypto(wish);
+      hideProcessing();
+      showSuccess(wish, result.tokenId, result.txHash);
+    } catch(e) {
+      hideProcessing();
+      alert('Mint failed: ' + (e.reason || e.message));
+    }
+  }
+
+  function collectWishData(){
+    // Image handling for MVP (no IPFS yet):
+    // - Store full base64 image in localStorage under a UUID key
+    // - Pass only the short key reference as imageURL to the contract
+    // - wish.html reads the key → looks up localStorage → displays image
+    // Future: upload to Pinata → store ipfs://Qm... hash in contract instead
+    // imageURL starts null — handleCryptoFlow uploads to IPFS and sets it to ipfs://...
+    // Before IPFS upload, we pass the base64 as imageData so the upload function has the raw bytes
+    let imageURL = null;
+    const imageData = state.croppedImageData || state.imageData || null;
+
+    return{
+      uuid:crypto.randomUUID(),occasion:state.occasion,
+      recipient:document.getElementById('recipientName').value.trim(),
+      recipientWallet:document.getElementById('recipientWallet').value.trim(),
+      message:document.getElementById('wishMessage').value.trim(),
+      sender:document.getElementById('senderName').value.trim()||'Anonymous',
+      tier:state.tier,price:state.tierPrice,theme:state.theme,
+      imageURL:imageURL,     // short key stored on-chain; actual image in localStorage
+      imageData:imageData,   // full base64 kept in memory for immediate display
+      audioCID:state.audioIPFSURL||null,    // IPFS CID for cross-device playback
+      audioProof:state.audioHash||null,     // SHA-256 hex for on-chain verification
+      audioURL:state.audioURL||null,
+      audioBase64:state.audioBase64||null,
+      audioIPFSURL:state.audioIPFSURL||null,
+      campaignHash:null,                    // bytes32(0) = personal wish
+      paymentMethod:state.paymentMethod,
+    };
+  }
+
+  function showSuccess(wish,tokenId,txHash){
+    const url=buildWishURL(tokenId);
+    const rec={
+      tokenId,occasion:wish.occasion,to:wish.recipient,
+      from:wish.sender||'Anonymous',message:wish.message,
+      tier:wish.tier,theme:wish.theme,
+      imageURL:wish.imageURL||null,     // HTTPS gateway URL after Lighthouse upload
+      imageData:null,                   // DON'T store base64 — too big for localStorage (2-3MB)
+      imagePosX:wish.imagePosX||50,
+      imagePosY:wish.imagePosY||50,
+      audioCID:wish.audioCID||null,
+      audioProof:wish.audioProof||null,
+      audioURL:wish.audioURL||null,
+      audioBase64:wish.audioBase64||null,
+      audioIPFSURL:wish.audioIPFSURL||null,
+      timestamp:new Date().toISOString(),isFirstOfDay:false,
+      txHash: txHash || ('0x'+Array.from({length:64},()=>Math.floor(Math.random()*16).toString(16)).join('')),
+    };
+    try{localStorage.setItem('ew_wish_'+tokenId,JSON.stringify(rec));}catch(e){}
+    document.getElementById('previewMessage').textContent=`"${wish.message}"`;
+    document.getElementById('tokenId').textContent=tokenId;
+    document.getElementById('viewWishBtn').href=url;
+    document.getElementById('wishLink').value=url;
+    const ai=document.getElementById('successAudioInfo');
+    if(ai){ai.textContent=wish.audioProof?`🎙 Voice proof: ${wish.audioProof.slice(0,12)}… sealed on-chain`:'';ai.style.display=wish.audioHash?'block':'none';}
+    document.getElementById('successModal').classList.add('visible');
+    feedWishes.unshift({occasion:wish.occasion,to:wish.recipient,message:wish.message,from:wish.sender,token:tokenId,tier:wish.tier,hasAudio:!!wish.audioHash});
+    renderFeed();
+  }
+
+  function showProcessing(t,s){document.getElementById('processingText').textContent=t;document.getElementById('processingSub').textContent=s;document.getElementById('processingOverlay').classList.add('visible');}
+  function hideProcessing(){document.getElementById('processingOverlay').classList.remove('visible');}
+  function closeModal(){document.getElementById('successModal').classList.remove('visible');}
+
+  function switchToCrypto(){
+    document.getElementById('upiComingSoonModal').classList.remove('visible');
+    // Switch payment selection to crypto
+    document.querySelectorAll('.pay-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('[data-method="crypto"]').classList.add('active');
+    state.paymentMethod='crypto';
+    document.getElementById('upiInfo').classList.remove('visible');
+    document.getElementById('cryptoInfo').classList.add('visible');
+    document.getElementById('mintBtn').textContent=state.walletConnected?'Seal this wish forever →':'Connect wallet to mint →';
+  }
+
+  // ── MY WISHES ─────────────────────────────────────────────────────────
+
+  let _allMyWishes = [];  // stored for search filtering
+
+  async function openMyWishes(){
+    const list=document.getElementById('myWishesList');
+    const empty=document.getElementById('myWishesEmpty');
+    list.innerHTML='';
+    empty.style.display='none';
+
+    // Show loading state
+    list.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;"><div style="display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div>Loading your wishes from blockchain…</div>';
+    document.getElementById('myWishesModal').classList.add('visible');
+
+    let wishes=[];
+
+    // If wallet connected — query blockchain events (single RPC call, no getWish needed)
+    if(state.walletConnected && state.walletAddress && typeof EternalWishes!=='undefined'){
+      try{
+        // getWishesByWallet reads WishMinted events — returns to, occasion, tier, timestamp
+        // This is ONE RPC call regardless of how many wishes exist — fast even for 1000+
+        wishes=await EternalWishes.getWishesByWallet(state.walletAddress, 100);
+      }catch(e){
+        console.log('Blockchain wish lookup failed:', e.message);
+      }
+    }
+
+    // Only use localStorage if NO wallet connected (for UPI users without wallet)
+    if(!state.walletConnected){
+      try{
+        for(let i=0;i<localStorage.length;i++){
+          const key=localStorage.key(i);
+          if(key && key.startsWith('ew_wish_')){
+            const w=JSON.parse(localStorage.getItem(key));
+            if(w && !wishes.find(x=>x.tokenId==w.tokenId)) wishes.push(w);
+          }
+        }
+      }catch(e){}
+    }
+
+    // Sort newest first
+    wishes.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    _allMyWishes = wishes;  // store for search filtering
+    document.getElementById('wishSearchInput').value = '';  // clear search on open
+    document.getElementById('wishSearchCount').style.display = 'none';
+
+    // Render using shared function (also used by search filter)
+    renderMyWishList(wishes);
+  }
+  function filterMyWishes(){
+    const query = (document.getElementById('wishSearchInput').value || '').toLowerCase().trim();
+    const countEl = document.getElementById('wishSearchCount');
+
+    if(!query){
+      // No search — show all with pagination
+      renderMyWishList(_allMyWishes);
+      countEl.style.display = 'none';
+      return;
+    }
+
+    // Filter across: to, occasion, tier, tokenId
+    const filtered = _allMyWishes.filter(w => {
+      const searchable = [
+        w.to || '',
+        w.occasion || '',
+        w.tier || '',
+        w.message || '',
+        '#' + w.tokenId,
+      ].join(' ').toLowerCase();
+      return searchable.includes(query);
+    });
+
+    countEl.textContent = `${filtered.length} wish${filtered.length !== 1 ? 'es' : ''} found`;
+    countEl.style.display = 'block';
+    renderMyWishList(filtered);
+  }
+
+  function renderMyWishList(wishes){
+    const list = document.getElementById('myWishesList');
+    const empty = document.getElementById('myWishesEmpty');
+    list.innerHTML = '';
+
+    if(wishes.length === 0){
+      empty.style.display = 'block';
+      empty.textContent = document.getElementById('wishSearchInput').value
+        ? 'No wishes match your search'
+        : 'No wishes found yet. Mint your first one!';
+      return;
+    }
+
+    empty.style.display = 'none';
+    const PAGE_SIZE = 10;
+    let shown = 0;
+
+    function renderBatch(startIdx, count){
+      const batch = wishes.slice(startIdx, startIdx + count);
+      batch.forEach(w => {
+        const url = buildWishURL(w.tokenId);
+        const tierLabel = (w.tier||'basic').charAt(0).toUpperCase() + (w.tier||'basic').slice(1);
+        const tierBadge = (w.tier||'basic') !== 'basic'
+          ? `<span style="font-size:10px;padding:1px 8px;background:var(--gold-pale);border:1px solid rgba(201,151,58,0.4);border-radius:20px;color:var(--gold);">${w.tier==='eternal'?'✦✦':'✦'} ${tierLabel}</span>`
+          : '';
+        const card = document.createElement('div');
+        card.style.cssText = 'background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color 0.2s;';
+        card.onmouseover = () => card.style.borderColor = 'var(--gold)';
+        card.onmouseout = () => card.style.borderColor = 'var(--border)';
+        card.onclick = () => window.open(url, '_blank');
+        card.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);">${w.occasion||''} ${tierBadge}</span>
+            <span style="font-size:11px;color:var(--chain-light);">#${w.tokenId}</span>
+          </div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--ink);margin-bottom:6px;">"${(w.to||'—')}"</div>
+          <div style="font-size:11px;color:var(--muted);">To ${w.to||'—'} · ${new Date(w.timestamp).toLocaleDateString('en-IN')}</div>
+        `;
+        list.appendChild(card);
+      });
+      shown += batch.length;
+    }
+
+    renderBatch(0, PAGE_SIZE);
+
+    if(wishes.length > PAGE_SIZE){
+      const info = document.createElement('div');
+      info.style.cssText = 'text-align:center;font-size:12px;color:var(--muted);padding:8px 0 4px;';
+      info.textContent = `Showing ${Math.min(PAGE_SIZE, wishes.length)} of ${wishes.length} wishes`;
+      list.appendChild(info);
+
+      const btn = document.createElement('button');
+      btn.style.cssText = 'width:100%;padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--ink);cursor:pointer;';
+      btn.textContent = 'Show more wishes ↓';
+      btn.onclick = () => {
+        btn.remove(); info.remove();
+        renderBatch(shown, PAGE_SIZE);
+        if(shown < wishes.length){
+          info.textContent = `Showing ${shown} of ${wishes.length} wishes`;
+          list.appendChild(info);
+          const newBtn = btn.cloneNode(true);
+          newBtn.onclick = btn.onclick;
+          list.appendChild(newBtn);
+        }
+      };
+      list.appendChild(btn);
+    }
+  }
+
+  function delay(ms){return new Promise(r=>setTimeout(r,ms));}
+
+  function copyLink(){navigator.clipboard.writeText(document.getElementById('wishLink').value).then(()=>{const b=document.querySelector('.copy-btn');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy',2000);});}
+  function shareWhatsApp(){const u=encodeURIComponent(document.getElementById('wishLink').value);window.open(`https://wa.me/?text=${encodeURIComponent('✨ I just sealed an eternal wish on the blockchain — ')}${u}`,'_blank');}
+  function shareTwitter(){const u=encodeURIComponent(document.getElementById('wishLink').value);window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Just minted an eternal wish on the blockchain ✨')}&url=${u}`,'_blank');}
+
+  const OCCASION_MAP={birthday:{i:'🎂',l:'Birthday'},anniversary:{i:'💍',l:'Anniversary'},wedding:{i:'💐',l:'Wedding'},newbaby:{i:'👶',l:'New Baby'},graduation:{i:'🎓',l:'Graduation'},promotion:{i:'🚀',l:'Promotion'},newyear:{i:'✨',l:'New Year'},memorial:{i:'🕯️',l:'In Memory'},custom:{i:'📌',l:'Preserve'}};
+  const THEME_COLORS={classic:'var(--cream)',romantic:'#fce4ec',dark:'#2d2520',nature:'#e8f5e9'};
+
+  let feedWishes = [];
+
+  // Load real wishes from blockchain
+  async function loadRecentFeed() {
+    try {
+      if (typeof EternalWishes === 'undefined') return;
+      const totalSupply = await (EternalWishes.contract || EternalWishes.initReadOnly()).totalSupply();
+      const total = Number(totalSupply);
+      document.getElementById('feedCount').textContent = `${total} wishes sealed forever`;
+
+      if (total === 0) return;
+
+      // Load last 6 wishes (or fewer if less exist)
+      const count = Math.min(total, 6);
+      const tokenIds = [];
+      for (let i = total; i > total - count; i--) tokenIds.push(i);
+
+      for (const id of tokenIds) {
+        try {
+          const w = await EternalWishes.getWish(id);
+          feedWishes.push({
+            occasion: w.occasion, to: w.to, message: w.message,
+            from: w.from, token: w.tokenId, tier: w.tier,
+            hasAudio: !!(w.audioCID)
+          });
+        } catch(e) { console.log('Skip token', id, e.message); }
+      }
+      renderFeed();
+      document.getElementById('feedLoading').style.display='none';
+    } catch(e) {
+      console.log('Feed load skipped:', e.message);
+      document.getElementById('feedLoading').style.display='none';
+    }
+  }
+
+  function renderFeed(){
+    // feedCount set by loadRecentFeed()
+    document.getElementById('wishFeed').innerHTML=feedWishes.map(w=>{
+      const occ=OCCASION_MAP[w.occasion]||OCCASION_MAP.custom;
+      const bg=w.tier!=='basic'?THEME_COLORS.classic:'var(--cream)';
+      const tierBadge=w.tier!=='basic'?`<span style="font-size:10px;padding:1px 7px;background:var(--gold-pale);border:1px solid rgba(201,151,58,0.4);border-radius:20px;color:var(--gold);">${w.tier==='eternal'?'✦✦':'✦'} ${w.tier}</span>`:'';
+      const audioIcon=w.hasAudio?'<span title="Voice note on-chain" style="font-size:11px;margin-left:3px;">🎙</span>':'';
+      return `<div class="feed-card" style="background:${bg};" onclick="window.location='wish.html?id=${w.token}'">
+        <div class="feed-occasion">${occ.i} ${occ.l} ${tierBadge}${audioIcon}</div>
+        <div class="feed-message">"${w.message}"</div>
+        <div class="feed-meta"><span>To ${w.to}</span><span class="feed-chain-badge">#${w.token}</span></div>
+      </div>`;
+    }).join('');
+  }
+
+
+  document.getElementById('wishDate').valueAsDate=new Date();
+  renderFeed();
+  loadRecentFeed();  // fetch real wishes from blockchain
+
+
+  // Show My Wishes button immediately if any wishes exist in localStorage
+  // Works even without wallet connected — UPI users can see their wishes too
+  (function checkLocalWishes(){
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        if(localStorage.key(i)?.startsWith('ew_wish_')){
+          document.getElementById('myWishesBtn').style.display='block';
+          return;
+        }
+      }
+    }catch(e){}
+  })();
+</script>
+</body>
+</html>
