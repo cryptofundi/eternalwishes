@@ -14,13 +14,13 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --ink: #1a1410; --parchment: #faf7f2; --cream: #f4efe6;
-    --gold: #c9973a; --gold-light: #e8c97a; --gold-pale: #f7edcd;
+    --gold: #b8862b; --gold-light: #d4a84f; --gold-pale: #f7edcd;
     --chain: #8a7560; --chain-light: #b5a48a; --muted: #7a6e62;
     --border: rgba(201,151,58,0.22); --radius: 20px; --radius-sm: 12px;
     --green: #22c55e;
     /* Theme vars — overridden by JS */
     --theme-bg: #f4efe6; --theme-card: #faf7f2;
-    --theme-msg: #1a1410; --theme-accent: #c9973a;
+    --theme-msg: #1a1410; --theme-accent: #b8862b;
   }
   html { scroll-behavior: smooth; }
   body { font-family: 'DM Sans', sans-serif; background: var(--parchment); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; transition: background 0.4s; }
@@ -76,7 +76,7 @@
   .premium-badge { margin-left: 8px; font-size: 10px; padding: 3px 10px; border-radius: 20px; display: none; font-weight: 500; }
   .premium-badge.visible { display: inline-block; }
   .premium-badge.premium { background: var(--gold-pale); border: 1px solid rgba(201,151,58,0.5); color: var(--gold); }
-  .premium-badge.eternal { background: var(--ink); color: var(--gold-light); border: 1px solid var(--gold); }
+  .premium-badge.eternal { background: linear-gradient(135deg, #1a1410, #2a1f16); color: #f7d98a; font-weight: 500; letter-spacing: 0.5px; border: 1px solid var(--gold); }
 
   /* CARD BODY */
   .card-body { padding: 36px 36px 28px; }
@@ -121,7 +121,7 @@
 
   .basescan-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 11px 14px; background: var(--parchment); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; color: var(--chain); cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 10px; transition: all 0.2s; text-decoration: none; font-weight: 500; }
   .basescan-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
-  .immutable-badge { background: var(--ink); color: var(--gold-light); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 10px; font-size: 11px; text-align: center; letter-spacing: 0.06em; line-height: 1.6; }
+  .immutable-badge { background: linear-gradient(135deg, #1a1410, #2a1f16); color: #f7d98a; font-weight: 500; letter-spacing: 0.5px; border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 10px; font-size: 11px; text-align: center; letter-spacing: 0.06em; line-height: 1.6; }
 
   /* SHARE PANEL */
   .share-panel { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 14px; animation: cardReveal 0.7s cubic-bezier(0.34,1.2,0.64,1) 0.25s both; }
@@ -156,9 +156,9 @@
 <body>
 
 <nav style="background:#1a1410;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;">
-  <a href="index.html" style="color:#e8c97a;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;text-decoration:none;">Eternal Wishes</a>
+  <a href="eternalwishes.html" style="color:#e8c97a;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;text-decoration:none;">Eternal Wishes</a>
   <div style="display:flex;gap:18px;">
-    <a href="index.html" style="color:#b5a48a;font-size:13px;text-decoration:none;">Create Wish</a>
+    <a href="eternalwishes.html" style="color:#b5a48a;font-size:13px;text-decoration:none;">Create Wish</a>
     <a href="moments.html" style="color:#b5a48a;font-size:13px;text-decoration:none;">Moments</a>
   </div>
 </nav>
@@ -349,9 +349,9 @@
 
   // ── THEME DEFINITIONS ──
   const THEMES = {
-    classic: { bg:'#faf7f2', card:'#f4efe6', msg:'#1a1410', accent:'#c9973a' },
+    classic: { bg:'#faf7f2', card:'#f4efe6', msg:'#1a1410', accent:'#b8862b' },
     romantic: { bg:'#fff5f7', card:'#fce4ec', msg:'#880e4f', accent:'#e91e63' },
-    dark: { bg:'#1a1410', card:'#2d2520', msg:'#e8c97a', accent:'#c9973a' },
+    dark: { bg:'#1a1410', card:'#2d2520', msg:'#e8c97a', accent:'#b8862b' },
     nature: { bg:'#f1f8e9', card:'#e8f5e9', msg:'#1b5e20', accent:'#2e7d32' },
   };
 
@@ -648,7 +648,7 @@
 
   // CONFETTI
   function launchConfetti() {
-    const colors = ['#c9973a','#e8c97a','#f7edcd','#1a1410','#b5a48a'];
+    const colors = ['#b8862b','#d4a84f','#f7edcd','#1a1410','#b5a48a'];
     for (let i = 0; i < 52; i++) {
       const el = document.createElement('div');
       el.className = 'confetti-piece';
