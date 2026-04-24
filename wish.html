@@ -155,6 +155,14 @@
 </head>
 <body>
 
+<nav style="background:#1a1410;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;">
+  <a href="eternalwishes.html" style="color:#e8c97a;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;text-decoration:none;">Eternal Wishes</a>
+  <div style="display:flex;gap:18px;">
+    <a href="eternalwishes.html" style="color:#b5a48a;font-size:13px;text-decoration:none;">Create Wish</a>
+    <a href="moments.html" style="color:#b5a48a;font-size:13px;text-decoration:none;">Moments</a>
+  </div>
+</nav>
+
 <div id="loadingState">
   <div class="loading-spinner"></div>
   <div class="loading-text">Loading your eternal wish…</div>
@@ -301,7 +309,7 @@
         <div class="share-header">Share this wish</div>
         <div class="share-body">
           <div class="share-link-row">
-            <input type="text" class="share-link-input" id="shareLink" readonly placeholder="Loading link…" style="min-height:40px;">
+            <div class="share-link-input" id="shareLink" style="min-height:40px;word-break:break-all;white-space:normal;cursor:text;user-select:all;">Loading link…</div>
             <button class="copy-btn" id="copyBtn" onclick="copyWishLink()">Copy</button>
           </div>
           <div class="share-btns-grid">
@@ -558,7 +566,7 @@
     }
 
     // Share
-    document.getElementById('shareLink').value = url;
+    document.getElementById('shareLink').textContent = url;
 
     // Celebrations
     if (['birthday','wedding','newbaby','graduation'].includes(data.occasion)) {
@@ -594,7 +602,7 @@
 
   // SHARING
   function copyWishLink() {
-    navigator.clipboard.writeText(document.getElementById('shareLink').value).then(() => {
+    navigator.clipboard.writeText(document.getElementById('shareLink').textContent).then(() => {
       const b = document.getElementById('copyBtn');
       b.textContent = 'Copied!'; b.classList.add('copied');
       setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('copied'); }, 2500);
@@ -620,13 +628,13 @@
 
   function shareWhatsApp() {
     const to = document.getElementById('wishTo').textContent;
-    const url = document.getElementById('shareLink').value;
+    const url = document.getElementById('shareLink').textContent;
     window.open(`https://wa.me/?text=${encodeURIComponent(`✨ An eternal wish for ${to} — sealed forever on the blockchain\n${url}`)}`, '_blank');
   }
 
   function shareTwitter() {
     const to = document.getElementById('wishTo').textContent;
-    const url = document.getElementById('shareLink').value;
+    const url = document.getElementById('shareLink').textContent;
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just sent an eternal wish to ${to} — sealed forever on the blockchain ✨`)}&url=${encodeURIComponent(url)}`, '_blank');
   }
 
@@ -634,7 +642,7 @@
 
   function shareGeneral() {
     const to = document.getElementById('wishTo').textContent;
-    const url = document.getElementById('shareLink').value;
+    const url = document.getElementById('shareLink').textContent;
     navigator.share ? navigator.share({ title:`Eternal Wish for ${to}`, url }) : copyWishLink();
   }
 
