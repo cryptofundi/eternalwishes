@@ -55,8 +55,8 @@
   .moment-meta { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
   .moment-meta .count { color: var(--gold); font-weight: 500; }
   .moment-actions { display: flex; justify-content: flex-end; }
-  .btn-wish { background: var(--gold-pale); border: 1px solid rgba(201,151,58,0.4); border-radius: var(--radius-sm); padding: 8px 18px; font-family: inherit; font-size: 13px; color: var(--gold); cursor: pointer; transition: all 0.2s; }
-  .btn-wish:hover { background: var(--gold); color: white; border-color: var(--gold); }
+  .btn-wish { background: var(--gold); border: 1px solid var(--gold); border-radius: var(--radius-sm); padding: 8px 18px; font-family: inherit; font-size: 13px; color: white; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+  .btn-wish:hover { opacity: 0.9; }
 
   /* Loading */
   .loading { text-align: center; padding: 40px 0; color: var(--muted); font-size: 13px; }
@@ -141,7 +141,7 @@
 const OCCASION_ICONS = {
   birthday:'🎂', anniversary:'💍', wedding:'💐', newbaby:'👶',
   graduation:'🎓', promotion:'🚀', newyear:'✨', memorial:'🕯️',
-  custom:'📌', celebration:'🎉',
+  valentine:'💝', custom:'📌', celebration:'🎉',
 };
 
 let allMoments = [];
